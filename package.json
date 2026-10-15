@@ -1,25 +1,21 @@
 {
   "name": "tracksy",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
-    "dev": "npm run build && node --env-file-if-exists=.env server/start-dev.js",
-    "start": "node --env-file-if-exists=.env server/start.js",
-    "start:api": "node --env-file-if-exists=.env --watch server/index.js",
-    "build": "vite build --configLoader native"
-  },
-  "dependencies": {
-    "express": "^5.1.0",
-    "express-rate-limit": "^7.5.0",
-    "helmet": "^8.1.0",
-    "multer": "^2.0.2",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^5.0.2",
-    "vite": "^7.1.7"
+    "setup": "node scripts/local.mjs setup",
+    "dev": "node scripts/local.mjs dev",
+    "start": "node scripts/local.mjs start",
+    "build": "node scripts/local.mjs build",
+    "typecheck": "npm --prefix frontend run typecheck",
+    "test": "node scripts/local.mjs test",
+    "test:integration": "node --test tests/workflow.test.mjs",
+    "migrate:legacy": "node scripts/migrate-legacy.mjs",
+    "backup": "node scripts/local.mjs backup",
+    "package": "node scripts/package-source.mjs"
   }
 }

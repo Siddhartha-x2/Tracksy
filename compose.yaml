@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:17.11-alpine
+    environment:
+      POSTGRES_DB: tracksy
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWORD:?Set DB_ADMIN_PASSWORD in .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    volumes:
+      - tracksy_database:/var/lib/postgresql/data
+      - ./scripts/postgres-init.sh:/docker-entrypoint-initdb.d/10-tracksy.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tracksy"]
+      interval: 5s
+      retries: 15
+  app:
+    build: .
+    env_file: .env
+    ports:
+      - "127.0.0.1:4000:4000"
+    environment:
+      PORT: 4000
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://db:5432/tracksy
+      DB_USER: tracksy
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-production}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      APP_ORIGINS: http://localhost:4000,http://127.0.0.1:4000
+      TRACKSY_UPLOAD_DIR: /app/uploads
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+      BOOTSTRAP_FACULTY_EMAIL: ${BOOTSTRAP_FACULTY_EMAIL:-}
+      BOOTSTRAP_FACULTY_PASSWORD: ${BOOTSTRAP_FACULTY_PASSWORD:-}
+    volumes:
+      - tracksy_uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  tracksy_database:
+  tracksy_uploads:

@@ -1,0 +1,19 @@
+export type Role = 'student' | 'faculty' | 'admin';
+export interface User { id: number; name: string; email: string; role: Role }
+export interface Project { id: string; name: string; description: string; term: string; problemStatement?: string; techStack?: string; startDate?: string; deadline?: string; status: string; memberCount: number; taskCount: number; myProjectRole: string; canManage: boolean; joinCode?: string; supervisionStatus?: string; facultyId?: number }
+export interface Member extends User { projectRole: string; active: boolean; joinedAt: string; responsibility?: string; githubUsername?: string; githubVerified?: boolean }
+export interface Task { id: string; name: string; details: string; assignedTo: number; assigneeName: string; dueDate?: string; priority: string; complexity: number; points: number; status: string; acceptanceCriteria?: string; milestoneId?: string; parentTaskId?: string; dependencyIds: string[]; blocker?: string; evidenceStatus?: string; version?: number }
+export interface Evidence { id: string; taskId: string; taskName: string; studentId: number; studentName: string; title: string; note: string; workLink?: string; status: string; version: number; submittedAt: string; feedback?: string; hasFile: boolean; originalFilename?: string }
+export interface EvidenceVersion { version: number; title: string; note: string; workLink?: string; submittedAt: string; hasFile: boolean; originalFilename?: string; decision?: string; feedback?: string; quality?: number; reviewedAt?: string }
+export interface Milestone { id: string; title: string; description: string; dueDate?: string; status: string }
+export interface WeeklyLog { id: string; userId: number; studentName?: string; name?: string; weekStart: string; completedWork: string; nextPlan: string; blockers?: string; hours: number; taskIds?: string[]; feedback?: string; quality?: number; createdAt?: string; revision?: number }
+export interface PeerReview { id: number; evaluatorId?: number; evaluatorName?: string; revieweeId: number; revieweeName?: string; period: string; collaboration: number; communication: number; reliability: number; feedback?: string }
+export type RubricKey = 'tasks' | 'evidence' | 'consistency' | 'peer' | 'repository' | 'documentation' | 'milestones';
+export interface Rubric { version: number; weights: Record<RubricKey, number>; updatedAt?: string; description?: string }
+export interface ReportMember { userId: number; name: string; role: string; assignedPoints: number; approvedPoints: number; approvedTasks: number; completionScore: number; contributionScore: number; contributionShare: number; deadlineAdherence?: number; rubricScore?: number; components: Partial<Record<RubricKey, number>>; explanations: Record<string, unknown> | string[] }
+export interface Report { members: ReportMember[]; summary: { taskCount: number; completedTasks: number; pendingReviews: number; approvedSubmissions: number; completionPercent: number }; rubric: Rubric; alerts: ({message: string; severity?: string; type?: string} | string)[]; generatedAt: string; scope: string }
+export interface Activity { id: number; actorName: string; action: string; entityType: string; entityId: number; details: unknown; createdAt: string }
+export interface Notification { id: number; title: string; body: string; read: boolean; projectId?: string; createdAt: string }
+export interface Invitation { id: string; projectId?: string; projectName?: string; email?: string; name?: string; userName?: string; status?: string; expiresAt?: string; requestedAt?: string; createdAt?: string }
+export interface Repository { owner?: string; name?: string; configured?: boolean; status?: string; lastSyncAt?: string; oauthConfigured?: boolean; integrationEnabled?: boolean; metrics?: Record<string, unknown>; mappings?: unknown[]; message?: string; [key: string]: unknown }
+export interface AdminUser extends User { enabled: boolean; projectCount?: number; createdAt?: string }

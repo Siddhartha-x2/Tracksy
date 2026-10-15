@@ -1,0 +1,11 @@
+node_modules
+**/node_modules
+**/dist
+work
+outputs
+.git
+.env
+server
+prototype
+backend/target
+backend/src/main/resources/static
