@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f6f7f9" />
+  <link rel="stylesheet" href="app.css" />
+  <title>Tracksy — Project contributions, made clear</title>
+
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">↗</span>tracksy</div>
+      <div class="workspace-label">Workspace</div>
+      <nav class="nav" aria-label="Main navigation">
+        <button class="active" data-page="overview"><span class="nav-icon">◫</span>Overview</button>
+        <button data-page="tasks"><span class="nav-icon">☷</span>My tasks<span class="nav-count" id="navTasks">0</span></button>
+        <button data-page="evidence"><span class="nav-icon">⌁</span>Evidence</button>
+        <button data-page="team"><span class="nav-icon">♧</span>Team</button>
+        <button data-page="reports"><span class="nav-icon">▥</span>Reports</button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="project-mini"><small>Active project</small><strong>Campus Connect</strong><span>Spring term · 5 members</span></div>
+      <div class="profile"><div class="avatar" id="avatar">AR</div><div><b id="profileName">Aarav Rao</b><small id="profileRole">Student</small></div><select id="roleSelect" aria-label="Switch role"><option value="student">Student</option><option value="faculty">Faculty</option></select></div>
+    </aside>
+    <main>
+      <header class="topbar"><div class="crumb">Tracksy <span style="padding:0 8px;color:#c4cac5">/</span> <b id="crumbLabel">Overview</b></div><div class="top-actions"><span class="today" id="today"></span><button class="bell" aria-label="Notifications" title="Notifications">♧</button></div></header>
+      <div class="content">
+        <section class="section-page visible" id="overviewPage">
+          <div class="welcome"><div><div class="eyebrow" id="greeting">YOUR WORKSPACE</div><h1 id="welcomeTitle">Good morning, Aarav 👋</h1><p>Here’s what’s happening with your project today.</p></div><button class="button" id="primaryAction">＋ Submit evidence</button></div>
+          <div class="stats" id="stats"></div>
+          <div class="grid">
+            <section class="card"><div class="card-head"><div><h2>Project overview</h2><p>Your team’s progress at a glance</p></div><button class="text-link" data-goto="team">View project ↗</button></div><div class="project-banner"><span class="pill">● &nbsp;In progress</span><h3>Campus Connect</h3><p>A campus community app for events, clubs, and the people who make them happen.</p><div class="banner-bottom"><span>♧ &nbsp;5 members</span><span>☷ &nbsp;8 tasks</span><span>◷ &nbsp;Due Nov 14</span></div></div><div class="card-head" style="margin:19px 0 4px"><div><h2>Tasks in focus</h2><p>Keep the momentum going</p></div><button class="text-link" data-goto="tasks">All tasks →</button></div><div class="tasks" id="taskFocus"></div></section>
+            <div style="display:grid;gap:17px;align-content:start"><section class="card"><div class="card-head"><div><h2>Contribution score</h2><p>Based on verified work</p></div><button class="text-link" data-goto="reports">Details →</button></div><div id="scoreBlock"></div></section><section class="card"><div class="card-head"><div><h2>Recent activity</h2><p>Latest team updates</p></div></div><div class="activity" id="activity"></div></section></div>
+          </div>
+        </section>
+        <section class="section-page" id="tasksPage"><div class="page-title"><div class="eyebrow">YOUR WORKSPACE</div><h1>My tasks</h1><p>Work moves forward when it’s visible. Here’s what your team is working on.</p></div><div class="toolbar"><input class="search" id="taskSearch" placeholder="⌕  Search tasks…"/><select class="filter" id="taskFilter"><option value="all">All statuses</option><option>In progress</option><option>To do</option><option>Under review</option><option>Done</option></select><button class="button" id="newTask">＋ New task</button></div><div class="card table-wrap"><table class="data-table"><thead><tr><th>Task</th><th>Assignee</th><th>Due date</th><th>Priority</th><th>Status</th><th></th></tr></thead><tbody id="taskTable"></tbody></table></div></section>
+        <section class="section-page" id="evidencePage"><div class="page-title"><div class="eyebrow">PROOF OF PROGRESS</div><h1>Evidence</h1><p>Work samples and updates, all in one place.</p></div><div class="toolbar"><input class="search" id="evidenceSearch" placeholder="⌕  Search evidence…"/><select class="filter" id="evidenceFilter"><option value="all">All statuses</option><option>Under review</option><option>Approved</option><option>Changes requested</option></select><button class="button" id="newEvidence">＋ Submit evidence</button></div><div class="card table-wrap"><table class="data-table"><thead><tr><th>Submission</th><th>Task</th><th>Submitted by</th><th>Date</th><th>Status</th><th>Review</th></tr></thead><tbody id="evidenceTable"></tbody></table></div></section>
+        <section class="section-page" id="teamPage"><div class="page-title"><div class="eyebrow">CAMPUS CONNECT</div><h1>Your team</h1><p>Five people, one project. See who’s moving things forward.</p></div><div class="card"><div class="card-head"><div><h2>Project members</h2><p>Campus Connect · Spring term</p></div><span class="pill green">● In progress</span></div><div id="teamList"></div></div></section>
+        <section class="section-page" id="reportsPage"><div class="page-title"><div class="eyebrow">THE BIG PICTURE</div><h1>Contribution report</h1><p>Transparent contribution scores, grounded in faculty-verified work.</p></div><div class="stats" id="reportStats"></div><div class="card" style="margin-top:17px"><div class="card-head"><div><h2>Team contributions</h2><p>Share of approved work by member</p></div><button class="button secondary small" id="exportReport">↓ &nbsp;Export report</button></div><div id="reportList"></div></div></section>
+      </div>
+    </main>
+  </div>
+  <div class="modal-backdrop" id="modalBackdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-top"><h2 id="modalTitle">New item</h2><button class="close" id="closeModal" aria-label="Close">×</button></div><div id="modalBody"></div><div class="modal-actions"><button class="button secondary" id="cancelModal">Cancel</button><button class="button" id="saveModal">Save</button></div></div></div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

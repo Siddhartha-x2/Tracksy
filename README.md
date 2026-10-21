@@ -60,6 +60,8 @@ Viva questions are generated from approved evidence using transparent templates.
 
 The previous Express/SQLite implementation and its database remain in src/ and server/ as a preserved reference. They are not the upgraded application's backend. scripts/migrate-legacy.mjs prepares a transactional import from the original SQLite database. Applying the import requires an empty PostgreSQL target whose Flyway migrations have already run; it refuses to overwrite existing users. Original scrypt password hashes are retained and upgraded to BCrypt on a successful login. Missing historical quality grades remain ungraded instead of being invented.
 
+The original standalone interface mockup is preserved under prototype/. See [the prototype notes](prototype/README.md) for its scope. Run the current application using the commands above.
+
 ## Project structure
 
 - frontend/src/pages, components and hooks — typed React screens and reusable controls.
