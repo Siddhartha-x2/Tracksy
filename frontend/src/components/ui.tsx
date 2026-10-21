@@ -40,10 +40,21 @@ export function Modal({ title, subtitle, children, onClose }: { title: string; s
   }, []);
   return <div className="modal-scrim" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}><div className="modal" ref={ref} role="dialog" aria-modal="true" aria-labelledby="dialog-title"><div className="modal-heading"><div><h2 id="dialog-title">{title}</h2>{subtitle && <p>{subtitle}</p>}</div><button className="icon-button" aria-label="Close dialog" onClick={onClose}><Icon name="close"/></button></div>{children}</div></div>;
 }
-export function ActionForm({ children, onSubmit, submitLabel = 'Save changes', onCancel }: { children: ReactNode; onSubmit: (form: HTMLFormElement) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
+export function ActionForm({ children, onSubmit, submitLabel = 'Save changes', onCancel }: { children: ReactNode; onSubmit: (data: FormData, form: HTMLFormElement) => Promise<void>; submitLabel?: string; onCancel?: () => void }) {
   const [busy, setBusy] = useState(false); const [error, setError] = useState('');
-  async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); if (busy) return; setBusy(true); setError(''); try { await onSubmit(event.currentTarget); } catch (err) { setError(errorMessage(err)); } finally { setBusy(false); } }
-  return <form onSubmit={submit}><fieldset disabled={busy} className="form-fieldset">{children}</fieldset>{error && <ErrorNotice message={error}/>}<div className="form-actions">{onCancel && <button type="button" className="button secondary" onClick={onCancel} disabled={busy}>Cancel</button>}<button className="button" disabled={busy}>{busy && <span className="spinner small-spinner"/>}{busy ? 'Saving…' : submitLabel}</button></div></form>;
+  const submitting = useRef(false);
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submitting.current) return;
+    const form = event.currentTarget;
+    // Disabled fields are omitted by FormData. Capture values before the busy render.
+    const data = new FormData(form);
+    submitting.current = true; setBusy(true); setError('');
+    try { await onSubmit(data, form); }
+    catch (err) { setError(errorMessage(err)); }
+    finally { submitting.current = false; setBusy(false); }
+  }
+  return <form onSubmit={submit} aria-busy={busy}><fieldset disabled={busy} className="form-fieldset">{children}</fieldset>{error && <ErrorNotice message={error}/>}<div className="form-actions">{onCancel && <button type="button" className="button secondary" onClick={onCancel} disabled={busy}>Cancel</button>}<button className="button" disabled={busy}>{busy && <span className="spinner small-spinner"/>}{busy ? 'Saving…' : submitLabel}</button></div></form>;
 }
 export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) { return <label className="field"><span>{label}</span>{children}{hint && <small>{hint}</small>}</label>; }
 export function JsonDetail({ data }: { data: unknown }) { if (data == null) return null; if (typeof data === 'string') return <p className="pre-wrap">{data}</p>; if (typeof data === 'object') return <dl className="detail-list">{Object.entries(data).map(([key, value]) => <div key={key}><dt>{key.replace(/([A-Z])/g, ' $1')}</dt><dd>{typeof value === 'object' ? JSON.stringify(value) : String(value ?? '—')}</dd></div>)}</dl>; return <span>{String(data)}</span>; }

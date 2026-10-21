@@ -36,4 +36,4 @@ export async function api<T>(path: string, options: { method?: string; body?: un
 }
 export function clearCsrf() { csrfToken = ''; }
 export function errorMessage(error: unknown) { return error instanceof Error ? error.message : 'Something went wrong. Try again.'; }
-export function formValues(form: HTMLFormElement): Record<string, string> { return Object.fromEntries(Array.from(new FormData(form).entries()).filter((entry): entry is [string, string] => typeof entry[1] === 'string')); }
+export function formValues(data: FormData): Record<string, string> { return Object.fromEntries(Array.from(data.entries()).filter((entry): entry is [string, string] => typeof entry[1] === 'string')); }

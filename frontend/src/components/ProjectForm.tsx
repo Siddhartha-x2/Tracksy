@@ -4,7 +4,7 @@ import type { Project, User } from '../types';
 import { ActionForm, ErrorNotice, Field, Loading } from './ui';
 export default function ProjectForm({ user, project, onSaved, onCancel }: { user: User; project?: Project; onSaved: () => void; onCancel: () => void }) {
   const faculty = useResource<{ faculty: { id: number; name: string }[] }>(!project && user.role === 'student' ? '/faculty' : null);
-  return <ActionForm onCancel={onCancel} submitLabel={project ? 'Save project' : 'Create workspace'} onSubmit={async form => { const values = formValues(form); await api(project ? `/projects/${project.id}` : '/projects', { method: project ? 'PATCH' : 'POST', body: { ...values, facultyId: values.facultyId ? Number(values.facultyId) : undefined } }); onSaved(); }}>
+  return <ActionForm onCancel={onCancel} submitLabel={project ? 'Save project' : 'Create workspace'} onSubmit={async submission => { const values = formValues(submission); await api(project ? `/projects/${project.id}` : '/projects', { method: project ? 'PATCH' : 'POST', body: { ...values, facultyId: values.facultyId ? Number(values.facultyId) : undefined } }); onSaved(); }}>
     <Field label="Project name"><input name="name" defaultValue={project?.name} required minLength={2} maxLength={120} placeholder="e.g. Campus Connect"/></Field>
     <Field label="Description"><textarea name="description" defaultValue={project?.description} maxLength={4000} placeholder="What is your team building?"/></Field>
     <Field label="Problem statement"><textarea name="problemStatement" defaultValue={project?.problemStatement} maxLength={4000} placeholder="Describe the problem and who it affects."/></Field>
